@@ -6,6 +6,7 @@
   programs.git.enable = true;
   programs.home-manager.enable = true;
   home.stateVersion = "25.11";
+  fonts.fontconfig.enable = true;
 
   programs.bash = {
     enable = true;
@@ -28,8 +29,37 @@
 	pkgs.rofi
 	pkgs.xev
 	pkgs.file-roller
+	pkgs.brightnessctl
+	pkgs.yazi
+	pkgs.taskwarrior2
+	pkgs.appflowy
+	pkgs.gcc
+	pkgs.gnumake
+	pkgs.fd
+	pkgs.ripgrep
+        pkgs.zathura
+#	pkgs.texliveBasic
+#	pkgs.texliveMedium
+#	pkgs.texlive.combined.scheme-medium
+	pkgs.nerd-fonts.arimo
+	pkgs.nerd-fonts.iosevka
+(	pkgs.texlive.withPackages (ps: [ 
+          ps.scheme-medium 
+	  ps.collection-latexextra
+        ]))
 ];      
   xsession.enable = true;
+  programs.neovim = {                                                                                  
+       enable = true;                                                                                   
+      extraPackages = with pkgs; [                                                                     
+         gcc        # Кампілятар З                                                                      
+         gnumake    # Утыліта make                                                                      
+         ripgrep    # Для працы Telescope (пошук тэксту)                                                
+         fd         # Для працы Telescope (пошук файлаў)                                                
+	 texlab
+	 jdt-language-server
+       ];                                                                                               
+     }; 
   programs.kitty.enable = true;
 services.polybar.config = ./dotfiles/polybar/config.ini;
 #programs.i3lock.enable = true;

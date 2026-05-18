@@ -81,9 +81,13 @@
   	firefox
 	htop
 	fastfetch
-	
+	#latexmk	
 	nemo
 	pulseaudio
+	gcc                                                                                         
+        gnumake                                                                                     
+        fd                                                                                          
+        ripgrep   
   ];
 services.gvfs.enable = true;
 services.udisks2.enable = true;
