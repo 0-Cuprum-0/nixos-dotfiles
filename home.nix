@@ -26,6 +26,7 @@
 	pkgs.cmd-polkit
 	pkgs.feh
 	pkgs.jq 
+	pkgs.nicotine-plus
 	pkgs.rofi
 	pkgs.xev
 	pkgs.file-roller
@@ -47,6 +48,7 @@
           ps.scheme-medium 
 	  ps.collection-latexextra
         ]))
+	pkgs.fzf
 ];      
   xsession.enable = true;
   programs.neovim = {                                                                                  
@@ -58,6 +60,7 @@
          fd         # Для працы Telescope (пошук файлаў)                                                
 	 texlab
 	 jdt-language-server
+	 xclip
        ];                                                                                               
      }; 
   programs.kitty.enable = true;
@@ -79,7 +82,25 @@ services.polybar.config = ./dotfiles/polybar/config.ini;
       package = pkgs.adwaita-qt;
     };
   };
-
+systemd.user.services.polkit-gnome-authentication-agent-1 = {
+  Unit = {
+    Description = "polkit-gnome-authentication-agent-1";
+    Wants = [ "graphical-session.target" ];
+    After = [ "graphical-session.target" ];
+    BindsTo = [ "graphical-session.target" ];
+  };
+  Install = {
+    WantedBy = [ "graphical-session.target" ];
+  };
+  Service = {
+    Type = "simple";
+    ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+    Restart = "on-failure";
+    RestartSec = 2;
+    TimeoutStopSec = 10;
+  };
+};
+programs.lutris.enable = true;
 
 home.file.".config/polybar/config.ini".source = ./dotfiles/polybar/config.ini;
 }
