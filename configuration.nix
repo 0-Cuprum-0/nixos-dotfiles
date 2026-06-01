@@ -88,6 +88,7 @@
         gnumake                                                                                     
         fd                                                                                          
         ripgrep   
+	shared-mime-info
   ];
 services.gvfs.enable = true;
 services.udisks2.enable = true;
@@ -123,7 +124,9 @@ programs.git = {
         directory = "/etc/nixos";
       };
     };
+
 };
+virtualisation.docker.enable = true;
 # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

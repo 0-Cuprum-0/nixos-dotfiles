@@ -49,6 +49,9 @@
 	  ps.collection-latexextra
         ]))
 	pkgs.fzf
+	pkgs.xournalpp
+	pkgs.postman
+	pywalfox-native
 ];      
   xsession.enable = true;
   programs.neovim = {                                                                                  
