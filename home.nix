@@ -51,7 +51,15 @@
 	pkgs.fzf
 	pkgs.xournalpp
 	pkgs.postman
-	pywalfox-native
+	pkgs.pywalfox-native
+	pkgs.teams-for-linux
+	pkgs.heroic
+	pkgs.asusctl
+	pkgs.telegram-desktop
+	pkgs.baobab
+	pkgs.google-chrome
+	pkgs.rsync
+
 ];      
   xsession.enable = true;
   programs.neovim = {                                                                                  
@@ -103,6 +111,11 @@ systemd.user.services.polkit-gnome-authentication-agent-1 = {
     TimeoutStopSec = 10;
   };
 };
+
+
+# Optional: If you encounter amdgpu issues with newer kernels (e.g., 6.10+ reported issues),
+# you might consider using the LTS kernel or a known stable version.
+# boot.kernelPackages = pkgs.linuxPackages; # Example for LTS`
 programs.lutris.enable = true;
 
 home.file.".config/polybar/config.ini".source = ./dotfiles/polybar/config.ini;

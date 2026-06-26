@@ -67,7 +67,7 @@
   users.users.cuprum = {
     isNormalUser = true;
     description = "cuprum";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "dialout" ];
     packages = with pkgs; [];
   };
 
@@ -89,7 +89,16 @@
         fd                                                                                          
         ripgrep   
 	shared-mime-info
+	esptool
   ];
+programs.steam = {
+  enable = true;
+};
+
+# Optional: If you encounter amdgpu issues with newer kernels (e.g., 6.10+ reported issues),
+# you might consider using the LTS kernel or a known stable version.
+# boot.kernelPackages = pkgs.linuxPackages; # Example for LTS
+services.asusd.enable = true;
 services.gvfs.enable = true;
 services.udisks2.enable = true;
 nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -125,6 +134,11 @@ programs.git = {
       };
     };
 
+};
+nix.gc = {
+  automatic = true;
+  dates = "weekly";
+  options = "--delete-older-than 14d";
 };
 virtualisation.docker.enable = true;
 # Some programs need SUID wrappers, can be configured further or are
