@@ -4,12 +4,14 @@
 
 { config, pkgs, ... }:
 
+
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+    
     ];
-
+#MAIN SYS SETTINGS
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -24,7 +26,10 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-
+environment.variables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
 
   # Set your time zone.
   time.timeZone = "Europe/Warsaw";
@@ -43,8 +48,11 @@
     LC_TELEPHONE = "pl_PL.UTF-8";
     LC_TIME = "pl_PL.UTF-8";
   };
-  services.xserver = {
-	enable = true;
+
+
+  #SERVICES  
+  services.xserver = { 
+  	enable = true;
 	libinput = {
       		enable = true;
       		touchpad = {
@@ -54,14 +62,7 @@
       };
     };
 };
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "pl";
-    variant = "";
-  };
 
-  # Configure console keymap
-  console.keyMap = "pl2";
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.cuprum = {
@@ -71,8 +72,22 @@
     packages = with pkgs; [];
   };
 
+#Enable flakes
+nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+#INPUT
+#Configure console keymap
+  console.keyMap = "pl2";
+
+
+  # Configure keymap in X11
+  services.xserver.xkb = {
+    layout = "pl";
+    variant = "";
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -90,7 +105,26 @@
         ripgrep   
 	shared-mime-info
 	esptool
+	discord
+	networkmanager
+
   ];
+
+programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+	libadwaita
+      ## Put here any library that is required when running a package
+      ## ...
+      ## Uncomment if you want to use the libraries provided by default in the steam distribution
+      ## but this is quite far from being exhaustive
+      ## https://github.com/NixOS/nixpkgs/issues/354513
+      # (pkgs.runCommand "steamrun-lib" {} "mkdir $out; ln -s ${pkgs.steam-run.fhsenv}/usr/lib64 $out/lib")
+    ];
+  };
+  ## Uncomment if you used steamrun's libraries
+  # nixpkgs.config.allowUnfree = true;
+
 programs.steam = {
   enable = true;
 };
@@ -101,7 +135,7 @@ programs.steam = {
 services.asusd.enable = true;
 services.gvfs.enable = true;
 services.udisks2.enable = true;
-nix.settings.experimental-features = ["nix-command" "flakes"];
+
 services.xserver.displayManager.lightdm.enable = true;
 services.xserver.windowManager.bspwm.enable = true;
 programs.dconf.enable = true;
@@ -152,13 +186,13 @@ virtualisation.docker.enable = true;
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+   services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+ #  networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

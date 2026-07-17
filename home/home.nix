@@ -7,6 +7,9 @@
   programs.home-manager.enable = true;
   home.stateVersion = "25.11";
   fonts.fontconfig.enable = true;
+#	home.sessionVariables = {
+#		EDITOR = "nvim";
+#};
 
   programs.bash = {
     enable = true;
@@ -59,8 +62,14 @@
 	pkgs.baobab
 	pkgs.google-chrome
 	pkgs.rsync
-
+	pkgs.freecad
+	pkgs.kicad
+	pkgs.obsidian
+	pkgs.rpi-imager
+	pkgs.remmina
+	pkgs.nmap
 ];      
+
   xsession.enable = true;
   programs.neovim = {                                                                                  
        enable = true;                                                                                   
@@ -74,6 +83,12 @@
 	 xclip
        ];                                                                                               
      }; 
+#REDO IT into programs = {} and place all the programs in here
+programs.direnv = {
+	enable = true;
+	enableBashIntegration = true; # see note on other shells below
+	nix-direnv.enable = true;
+}; 
   programs.kitty.enable = true;
 services.polybar.config = ./dotfiles/polybar/config.ini;
 #programs.i3lock.enable = true;
