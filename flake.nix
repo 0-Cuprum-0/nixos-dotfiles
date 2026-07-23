@@ -34,7 +34,7 @@
 				home-manager  = {
 					useGlobalPkgs = true;
 					useUserPackages = true;
-					users.cuprum = import ./home.nix;
+					users.cuprum = import ./home/home.nix;
 					backupFileExtension = "backup";
 					
 };

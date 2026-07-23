@@ -11,88 +11,80 @@
 #		EDITOR = "nvim";
 #};
 
-  programs.bash = {
-    enable = true;
-  
-	initExtra = ''
-	if [ -f ~/.cache/wal/sequences ]; then
-          cat ~/.cache/wal/sequences
-      fi
-    '';
-};
-  home.packages = [
-    	pkgs.polybar
-    	pkgs.nemo
-	pkgs.sxhkd
-	pkgs.pywal
-	pkgs.waypaper
-	pkgs.cmd-polkit
-	pkgs.feh
-	pkgs.jq 
-	pkgs.nicotine-plus
-	pkgs.rofi
-	pkgs.xev
-	pkgs.file-roller
-	pkgs.brightnessctl
-	pkgs.yazi
-	pkgs.taskwarrior2
-	pkgs.appflowy
-	pkgs.gcc
-	pkgs.gnumake
-	pkgs.fd
-	pkgs.ripgrep
-        pkgs.zathura
-#	pkgs.texliveBasic
-#	pkgs.texliveMedium
-#	pkgs.texlive.combined.scheme-medium
-	pkgs.nerd-fonts.arimo
-	pkgs.nerd-fonts.iosevka
-(	pkgs.texlive.withPackages (ps: [ 
-          ps.scheme-medium 
-	  ps.collection-latexextra
-        ]))
-	pkgs.fzf
-	pkgs.xournalpp
-	pkgs.postman
-	pkgs.pywalfox-native
-	pkgs.teams-for-linux
-	pkgs.heroic
-	pkgs.asusctl
-	pkgs.telegram-desktop
-	pkgs.baobab
-	pkgs.google-chrome
-	pkgs.rsync
-	pkgs.freecad
-	pkgs.kicad
-	pkgs.obsidian
-	pkgs.rpi-imager
-	pkgs.remmina
-	pkgs.nmap
-];      
+imports = [
+./home_pkgs.nix
+];
 
-  xsession.enable = true;
-  programs.neovim = {                                                                                  
-       enable = true;                                                                                   
-      extraPackages = with pkgs; [                                                                     
-         gcc        # Кампілятар З                                                                      
-         gnumake    # Утыліта make                                                                      
-         ripgrep    # Для працы Telescope (пошук тэксту)                                                
-         fd         # Для працы Telescope (пошук файлаў)                                                
-	 texlab
-	 jdt-language-server
-	 xclip
-       ];                                                                                               
-     }; 
-#REDO IT into programs = {} and place all the programs in here
-programs.direnv = {
-	enable = true;
-	enableBashIntegration = true; # see note on other shells below
-	nix-direnv.enable = true;
-}; 
-  programs.kitty.enable = true;
-services.polybar.config = ./dotfiles/polybar/config.ini;
-#programs.i3lock.enable = true;
-  gtk = {
+programs = {
+	bash = {
+	    enable = true;
+	  
+		initExtra = ''
+		if [ -f ~/.cache/wal/sequences ]; then
+		  cat ~/.cache/wal/sequences
+	      fi
+	    '';
+	};
+
+	neovim =                                                                                 
+		let 
+			toLua = str: "lua << EOF\n${str}\nEOF\n"; # convert one line config into lua 
+			toLuaFile = filr : "lua << EOF\n${builtins.readFile file}\nEOF\n" # convert file path to lua conf file path
+		in
+		{
+
+		enable = true;                                                                                   
+		viAlias = true;
+		vimAlias = true;
+		vimdiffAlias = true;
+		extraPackages = with pkgs; [                                                                     
+			gcc# C compiler                                                                      
+			gnumake #make 
+			ripgrep    # Для працы Telescope (пошук тэксту)                                                
+			fd         # Для працы Telescope (пошук файлаў)                                               
+			texlab
+			jdt-language-server
+		 	xclip
+		       ];                                                                                               
+		       plugins = with pkgs.VimPlugins;[
+				{
+					plugin = nvim-lspconfig;
+					config = toLuaFile ./programs/nvim/lua/plugins/lsp.lua;
+				}
+			   	nvim-tree
+				project
+				quicker
+				render-markdown
+				scope
+				snacks
+				vimtex
+				fzf-lua
+				lsp
+				lualine
+				luatab
+				mason
+				yazi
+				mini.nvim
+				alpha-nvim
+				nvim-autopairs
+		       ]
+	     }; 
+	direnv = {
+		enable = true;
+		enableBashIntegration = true; # see note on other shells below
+		nix-direnv.enable = true;
+	};
+
+	kitty = {
+		enable = true;
+		};
+
+
+
+}
+xsession.enable = true;
+programs. services.polybar.config = ./dotfiles/polybar/config.ini;
+gtk = {
     enable = true;
     theme = {
       name = "Adwaita-dark";
@@ -100,7 +92,7 @@ services.polybar.config = ./dotfiles/polybar/config.ini;
     };
   };
 
-  qt = {
+qt = {
     enable = true;
     platformTheme.name = "adwaita";
     style = {
@@ -133,5 +125,5 @@ systemd.user.services.polkit-gnome-authentication-agent-1 = {
 # boot.kernelPackages = pkgs.linuxPackages; # Example for LTS`
 programs.lutris.enable = true;
 
-home.file.".config/polybar/config.ini".source = ./dotfiles/polybar/config.ini;
+home.file.".config/polybar/config.ini".source = ../dotfiles/polybar/config.ini;
 }

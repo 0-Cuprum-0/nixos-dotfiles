@@ -3,7 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }:
-
+#	aaaaaaaaaaaaaaaaaaaa
 
 {
   imports =
@@ -107,6 +107,10 @@ nix.settings.experimental-features = [ "nix-command" "flakes" ];
 	esptool
 	discord
 	networkmanager
+	(python313.withPackages (python-pkgs: [
+	    python-pkgs.gtfs-realtime-bindings
+	    python-pkgs.requests
+	  ]))
 
   ];
 
@@ -174,6 +178,61 @@ nix.gc = {
   dates = "weekly";
   options = "--delete-older-than 14d";
 };
+
+
+systemd.timers.gtfs_fetcher = {
+  wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "5m";
+      OnUnitActiveSec = "6h";
+      Persistent = true;
+      Unit = "gtfs_fetcher.service";
+    };
+};
+
+systemd.services.gtfs_fetcher = {
+  script = ''
+    cd /home/cuprum/GTFSAlertsProject/server/
+    ${pkgs.python313.withPackages (python-pkgs: [
+	python-pkgs.gtfs-realtime-bindings
+	python-pkgs.requests
+
+		
+    ])
+
+
+
+    }/bin/python ./parser.py
+    ${pkgs.coreutils}/bin/python ./parser.py
+  '';
+  serviceConfig = {
+    Type = "oneshot";
+    User = "cuprum";
+  };
+};
+
+systemd.services.gtfs_server= {
+  description = "Server responsible for sending gtfs data to esp32 project ";
+  serviceConfig = {
+    User = "cuprum";
+    Restart = "always";
+  };
+  script = ''
+
+  ${pkgs.python313}/bin/python   /home/cuprum/GTFSAlertsProject/server/server_handler.py
+  '';
+  wantedBy = [ "multi-user.target" ]; # starts after login
+};
+
+networking.firewall = {
+	enable = true;
+	allowedTCPPorts = [ 8000 ];
+
+
+};
+
+
+
 virtualisation.docker.enable = true;
 # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
