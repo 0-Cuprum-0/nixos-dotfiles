@@ -7,84 +7,116 @@
   programs.home-manager.enable = true;
   home.stateVersion = "25.11";
   fonts.fontconfig.enable = true;
-#	home.sessionVariables = {
-#		EDITOR = "nvim";
-#};
+  #	home.sessionVariables = {
+  #		EDITOR = "nvim";
+  #};
 
-imports = [
-./home_pkgs.nix
-];
+  imports = [
+    ./home_pkgs.nix
+  ];
 
-programs = {
-	bash = {
-	    enable = true;
-	  
-		initExtra = ''
-		if [ -f ~/.cache/wal/sequences ]; then
-		  cat ~/.cache/wal/sequences
-	      fi
-	    '';
-	};
+  programs = {
+    bash = {
+      enable = true;
 
-	neovim =                                                                                 
-		let 
-			toLua = str: "lua << EOF\n${str}\nEOF\n"; # convert one line config into lua 
-			toLuaFile = filr : "lua << EOF\n${builtins.readFile file}\nEOF\n" # convert file path to lua conf file path
-		in
-		{
+      initExtra = ''
+        		if [ -f ~/.cache/wal/sequences ]; then
+        		  cat ~/.cache/wal/sequences
+        	      fi
+        	    '';
+    };
 
-		enable = true;                                                                                   
-		viAlias = true;
-		vimAlias = true;
-		vimdiffAlias = true;
-		extraPackages = with pkgs; [                                                                     
-			gcc# C compiler                                                                      
-			gnumake #make 
-			ripgrep    # Для працы Telescope (пошук тэксту)                                                
-			fd         # Для працы Telescope (пошук файлаў)                                               
-			texlab
-			jdt-language-server
-		 	xclip
-		       ];                                                                                               
-		       plugins = with pkgs.VimPlugins;[
-				{
-					plugin = nvim-lspconfig;
-					config = toLuaFile ./programs/nvim/lua/plugins/lsp.lua;
-				}
-			   	nvim-tree
-				project
-				quicker
-				render-markdown
-				scope
-				snacks
-				vimtex
-				fzf-lua
-				lsp
-				lualine
-				luatab
-				mason
-				yazi
-				mini.nvim
-				alpha-nvim
-				nvim-autopairs
-		       ]
-	     }; 
-	direnv = {
-		enable = true;
-		enableBashIntegration = true; # see note on other shells below
-		nix-direnv.enable = true;
-	};
+    neovim =
+      let
+        toLua = str: "lua << EOF\n${str}\nEOF\n"; # convert one line config into lua
+        toLuaFile = file: "lua << EOF\n${builtins.readFile file}\nEOF\n"; # convert file path to lua conf file path
+      in
+      {
 
-	kitty = {
-		enable = true;
-		};
+        enable = true;
+        viAlias = true;
+        vimAlias = true;
+        vimdiffAlias = true;
+	extraLuaConfig = ''
+	  -- 1. Extend package.path FIRST so Lua knows where ~/.config/nvim/lua is
+	  local config_dir = vim.fn.stdpath("config")
+	  package.path = package.path .. ";" .. config_dir .. "/lua/?.lua;" .. config_dir .. "/lua/?/init.lua"
 
+	  -- 2. NOW run init.lua
+	  ${builtins.readFile ./programs/nvim/init.lua}
+	'';
+        extraPackages = with pkgs; [
+          gcc # C compiler
+          gnumake # make
+          ripgrep # Для працы Telescope (пошук тэксту)
+          fd # Для працы Telescope (пошук файлаў)
+          texlab
+          jdt-language-server
+          xclip
+        ];
+        plugins = with pkgs.vimPlugins; [
+          {
+            plugin = nvim-lspconfig;
+            config = toLuaFile ./programs/nvim/lua/plugins/lsp.lua;
+          }
+          {
+            plugin = nvim-tree-lua;
+            config = ''
+              				    echo "NIX TREE CONFIG START"
 
+              				    packadd! nvim-tree.lua
 
-}
-xsession.enable = true;
-programs. services.polybar.config = ./dotfiles/polybar/config.ini;
-gtk = {
+              				    lua << EOF
+              					error("HELLO FROM  HOME MANAGER")
+              				      require("nvim-tree").setup({
+              					view = {
+              					  width = 50,
+              					},
+              				      })
+              				    EOF
+              				  '';
+          }
+          {
+            plugin = fzf-lua;
+            config = toLuaFile ./programs/nvim/lua/plugins/fzf-lua.lua;
+
+          }
+          #	project-nvim
+          #	quicker-nvim
+          #	render-markdown
+          #	scope-nvim
+          #	#snacks-nvim
+          #	vimtex
+          #	fzf-lua
+          #	lsp
+          #	lualine
+          #	luatab
+          #	mason
+          #	yazi
+          #	mini.nvim
+          #	alpha-nvim
+          #	nvim-autopairs
+        ];
+      };
+    direnv = {
+      enable = true;
+      enableBashIntegration = true; # see note on other shells below
+      nix-direnv.enable = true;
+    };
+
+    kitty = {
+      enable = true;
+    };
+
+  };
+  xdg.configFile."nvim" = {
+    source = ./programs/nvim;
+    recursive = true;
+  };
+
+  xsession.enable = true;
+  services.polybar.config = ./dotfiles/polybar/config.ini;
+  gtk = {
     enable = true;
     theme = {
       name = "Adwaita-dark";
@@ -92,7 +124,7 @@ gtk = {
     };
   };
 
-qt = {
+  qt = {
     enable = true;
     platformTheme.name = "adwaita";
     style = {
@@ -100,30 +132,29 @@ qt = {
       package = pkgs.adwaita-qt;
     };
   };
-systemd.user.services.polkit-gnome-authentication-agent-1 = {
-  Unit = {
-    Description = "polkit-gnome-authentication-agent-1";
-    Wants = [ "graphical-session.target" ];
-    After = [ "graphical-session.target" ];
-    BindsTo = [ "graphical-session.target" ];
+  systemd.user.services.polkit-gnome-authentication-agent-1 = {
+    Unit = {
+      Description = "polkit-gnome-authentication-agent-1";
+      Wants = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+      BindsTo = [ "graphical-session.target" ];
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      Restart = "on-failure";
+      RestartSec = 2;
+      TimeoutStopSec = 10;
+    };
   };
-  Install = {
-    WantedBy = [ "graphical-session.target" ];
-  };
-  Service = {
-    Type = "simple";
-    ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-    Restart = "on-failure";
-    RestartSec = 2;
-    TimeoutStopSec = 10;
-  };
-};
 
-
-# Optional: If you encounter amdgpu issues with newer kernels (e.g., 6.10+ reported issues),
-# you might consider using the LTS kernel or a known stable version.
-# boot.kernelPackages = pkgs.linuxPackages; # Example for LTS`
-programs.lutris.enable = true;
-
-home.file.".config/polybar/config.ini".source = ../dotfiles/polybar/config.ini;
+  # Optional: If you encounter amdgpu issues with newer kernels (e.g., 6.10+ reported issues),
+  # you might consider using the LTS kernel or a known stable version.
+  # boot.kernelPackages = pkgs.linuxPackages; # Example for LTS`
+  programs.lutris.enable = true;
+  #home.file.".config/nvim".source = ./programs/nvim;
+  home.file.".config/polybar/config.ini".source = ../dotfiles/polybar/config.ini;
 }

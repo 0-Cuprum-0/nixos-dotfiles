@@ -111,6 +111,8 @@ nix.settings.experimental-features = [ "nix-command" "flakes" ];
 	    python-pkgs.gtfs-realtime-bindings
 	    python-pkgs.requests
 	  ]))
+	  nixfmt
+	  tree
 
   ];
 
