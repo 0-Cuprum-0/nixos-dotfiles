@@ -38,11 +38,9 @@
         vimAlias = true;
         vimdiffAlias = true;
 	extraLuaConfig = ''
-	  -- 1. Extend package.path FIRST so Lua knows where ~/.config/nvim/lua is
 	  local config_dir = vim.fn.stdpath("config")
 	  package.path = package.path .. ";" .. config_dir .. "/lua/?.lua;" .. config_dir .. "/lua/?/init.lua"
 
-	  -- 2. NOW run init.lua
 	  ${builtins.readFile ./programs/nvim/init.lua}
 	'';
         extraPackages = with pkgs; [
@@ -55,6 +53,7 @@
           xclip
         ];
         plugins = with pkgs.vimPlugins; [
+		nvim-web-devicons
           {
             plugin = nvim-lspconfig;
             config = toLuaFile ./programs/nvim/lua/plugins/lsp.lua;
@@ -81,6 +80,7 @@
             config = toLuaFile ./programs/nvim/lua/plugins/fzf-lua.lua;
 
           }
+	  plenary-nvim
           #	project-nvim
           #	quicker-nvim
           #	render-markdown
@@ -94,7 +94,11 @@
           #	mason
           #	yazi
           #	mini.nvim
-          #	alpha-nvim
+	  {
+
+          plugin = alpha-nvim;
+	  config = toLuaFile ./programs/nvim/lua/plugins/alpha-nvim.lua; 
+	  }
           #	nvim-autopairs
         ];
       };

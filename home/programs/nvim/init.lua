@@ -18,6 +18,8 @@ vim.opt.completeopt = "menuone,noinsert,noselect" -- completion options
 --INCLUDE'S
 require("mappings")
 require("plugins.nvim-tree")
+require("plugins.fzf-lua")
+require("plugins.alpha-nvim")
 
 
 vim.api.nvim_create_autocmd("DiagnosticChanged", {

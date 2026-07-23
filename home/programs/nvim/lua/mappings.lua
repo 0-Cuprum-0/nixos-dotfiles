@@ -26,7 +26,7 @@ map('n', '<leader>pr', ':Project recents<CR>', { desc = 'Print Recent Projects'}
   vim.o.relativenumber = true
   --add keyboard
 vim.opt.clipboard = "unnamedplus"
-  require("config.lazy")
+--  require("config.lazy")
 
   --enable\ define terminal
   vim.opt.shell = "bash"
