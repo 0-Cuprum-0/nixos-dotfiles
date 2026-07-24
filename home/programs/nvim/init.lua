@@ -20,6 +20,7 @@ require("mappings")
 require("plugins.nvim-tree")
 require("plugins.fzf-lua")
 require("plugins.alpha-nvim")
+-- require("plugins")
 
 
 vim.api.nvim_create_autocmd("DiagnosticChanged", {

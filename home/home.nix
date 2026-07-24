@@ -81,6 +81,10 @@
 
           }
 	  plenary-nvim
+	  {
+	    plugin = oxocarbon-nvim;
+	    config = toLuaFile ./programs/nvim/lua/plugins/oxocarbon.lua;
+	  }
           #	project-nvim
           #	quicker-nvim
           #	render-markdown
