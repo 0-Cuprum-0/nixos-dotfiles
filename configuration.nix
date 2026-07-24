@@ -134,6 +134,7 @@ programs.nix-ld = {
 programs.steam = {
   enable = true;
 };
+#home-manager.users.cuprum = import ./home/home.nix;
 
 # Optional: If you encounter amdgpu issues with newer kernels (e.g., 6.10+ reported issues),
 # you might consider using the LTS kernel or a known stable version.

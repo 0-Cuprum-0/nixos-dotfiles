@@ -20,8 +20,9 @@ require("mappings")
 require("plugins.nvim-tree")
 require("plugins.fzf-lua")
 require("plugins.alpha-nvim")
--- require("plugins")
-
+require("plugins.oxocarbon")
+require("lsp.python")
+require("lsp.lua")
 
 vim.api.nvim_create_autocmd("DiagnosticChanged", {
   group = diagnostic_qf_grp,

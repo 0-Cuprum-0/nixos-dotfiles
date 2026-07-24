@@ -37,20 +37,25 @@
         viAlias = true;
         vimAlias = true;
         vimdiffAlias = true;
-	extraLuaConfig = ''
-	  local config_dir = vim.fn.stdpath("config")
-	  package.path = package.path .. ";" .. config_dir .. "/lua/?.lua;" .. config_dir .. "/lua/?/init.lua"
+	#extraLuaConfig = ''
+	#  local config_dir = vim.fn.stdpath("config")
+	#  package.path = package.path .. ";" .. config_dir .. "/lua/?.lua;" .. config_dir .. "/lua/?/init.lua"
 
-	  ${builtins.readFile ./programs/nvim/init.lua}
-	'';
+	#  ${builtins.readFile ./programs/nvim/init.lua}
+	#'';
         extraPackages = with pkgs; [
-          gcc # C compiler
-          gnumake # make
-          ripgrep # Для працы Telescope (пошук тэксту)
-          fd # Для працы Telescope (пошук файлаў)
-          texlab
-          jdt-language-server
+          gnumake 
+	  ripgrep 
+	  fd 
+	  texlab
           xclip
+	  #LANGUAGE SERVERS
+	  pyright
+	  emmylua-ls
+	  luajit
+
+          jdt-language-server
+          gcc 
         ];
         plugins = with pkgs.vimPlugins; [
 		nvim-web-devicons
