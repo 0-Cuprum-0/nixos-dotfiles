@@ -49,7 +49,13 @@
 	pkgs.rpi-imager
 	pkgs.remmina
 	pkgs.nmap
-	pkgs.thonny
+	#LANGUAGE SERVERS
+	  pyright
+	  emmylua-ls
+	  luajit
+
+          jdt-language-server
+          gcc pkgs.thonny
 ];      
 
 }

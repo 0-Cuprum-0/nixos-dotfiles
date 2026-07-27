@@ -50,7 +50,7 @@
 	  texlab
           xclip
 	  #LANGUAGE SERVERS
-	  pyright
+	  basedpyright
 	  emmylua-ls
 	  luajit
 
@@ -92,7 +92,7 @@
 	  }
           #	project-nvim
           #	quicker-nvim
-          #	render-markdown
+          	render-markdown
           #	scope-nvim
           #	#snacks-nvim
           #	vimtex
