@@ -50,6 +50,20 @@ environment.variables = {
   };
 
 
+  xdg.portal = {
+	enable = true;
+	#xdgOpenPortal = true;
+	extraPortals = [
+#	      pkgs.xdg-desktop-portal-gnome
+	      pkgs.xdg-desktop-portal-gtk
+#	      pkgs.xdg-desktop-portal-hyprland
+#	      pkgs.xdg-desktop-portal-kde
+#	      pkgs.xdg-desktop-portal-wlr
+	    ];
+
+  };
+
+
   #SERVICES  
   services.xserver = { 
   	enable = true;
@@ -113,6 +127,7 @@ nix.settings.experimental-features = [ "nix-command" "flakes" ];
 	  ]))
 	  nixfmt
 	  tree
+	  #avahi #mDNS
 
   ];
 
@@ -147,7 +162,9 @@ services.xserver.displayManager.lightdm.enable = true;
 services.xserver.windowManager.bspwm.enable = true;
 programs.dconf.enable = true;
 programs.slock.enable = true;
+services.avahi.enable = true;
 # Remove sound.enable or set it to false if you had it set previously, as sound.enable is only meant for ALSA-based configurations
+
 
 # rtkit is optional but recommended
 security.rtkit.enable = true;

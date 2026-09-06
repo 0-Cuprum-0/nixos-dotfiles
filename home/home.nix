@@ -50,19 +50,20 @@
 	  texlab
           xclip
 	  #LANGUAGE SERVERS
-	  basedpyright
+	  #basedpyright
 	  emmylua-ls
+	  pyright
 	  luajit
 
-          jdt-language-server
-          gcc 
+          #jdt-language-server
+          #gcc 
         ];
         plugins = with pkgs.vimPlugins; [
 		nvim-web-devicons
-          {
-            plugin = nvim-lspconfig;
-            config = toLuaFile ./programs/nvim/lua/plugins/lsp.lua;
-          }
+	{
+	  plugin = nvim-lspconfig;
+	  config = toLuaFile ./programs/nvim/lua/plugins/lsp.lua;
+	}
           {
             plugin = nvim-tree-lua;
             config = ''
@@ -92,7 +93,8 @@
 	  }
           #	project-nvim
           #	quicker-nvim
-          	render-markdown
+	  	render-markdown-nvim
+	  
           #	scope-nvim
           #	#snacks-nvim
           #	vimtex
@@ -119,6 +121,11 @@
 
     kitty = {
       enable = true;
+    };
+    keepassxc = {
+	enable = true;
+	settings.Browser.UpdateBinaryPath = false;
+
     };
 
   };

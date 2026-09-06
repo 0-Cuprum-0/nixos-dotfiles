@@ -50,12 +50,20 @@
 	pkgs.remmina
 	pkgs.nmap
 	#LANGUAGE SERVERS
-	  pyright
-	  emmylua-ls
-	  luajit
+	#basedpyright
+	#  emmylua-ls
+	pkgs.luajit
 
-          jdt-language-server
-          gcc pkgs.thonny
+        pkgs.jdt-language-server
+        pkgs.gcc 
+	#pkgs.thonny
+	pkgs.faugus-launcher #lutris alternative
+	pkgs.waydroid
+	pkgs.dpkg
+	pkgs.shutter
+	pkgs.vlc
+	pkgs.libreoffice
+	#pkgs.avahi
 ];      
 
 }
