@@ -91,7 +91,7 @@
 	    plugin = oxocarbon-nvim;
 	    config = toLuaFile ./programs/nvim/lua/plugins/oxocarbon.lua;
 	  }
-          #	project-nvim
+          	project-nvim
           #	quicker-nvim
 	  	render-markdown-nvim
 	  
@@ -100,7 +100,7 @@
           #	vimtex
           #	fzf-lua
           #	lsp
-          #	lualine
+          	lualine-nvim
           #	luatab
           #	mason
           #	yazi
@@ -110,7 +110,7 @@
           plugin = alpha-nvim;
 	  config = toLuaFile ./programs/nvim/lua/plugins/alpha-nvim.lua; 
 	  }
-          #	nvim-autopairs
+          nvim-autopairs
         ];
       };
     direnv = {

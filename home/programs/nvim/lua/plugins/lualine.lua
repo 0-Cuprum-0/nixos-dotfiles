@@ -1,5 +1,5 @@
-return {
-  'nvim-lualine/lualine.nvim',
+require("lualine").setup({
+
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   opts = {
     options = {
@@ -26,4 +26,4 @@ return {
       lualine_z = { 'location' }
     },
   },
-}
+  })

@@ -39,7 +39,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
     vim.cmd("tabnext 1") 
     end,
 })
--- Jump to the NEXT error/warning
+--DIAGNOSTIC Jump to the NEXT error/warning
     vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Next Diagnostic' })
 
 -- Jump to the PREVIOUS error/warning
@@ -49,3 +49,5 @@ vim.api.nvim_create_autocmd("VimEnter", {
     vim.keymap.set('n', '<leader>[', vim.diagnostic.open_float, { desc = 'Floating Diagnostic' })
  -- Create an autocommand group for diagnostic quickfix automation
 local diagnostic_qf_grp = vim.api.nvim_create_augroup("DiagnosticToQf", { clear = true })
+-- QUICKFIX
+vim.keymap.set('n', '<leader>qd', vim.diagnostic.setqflist, {desc = 'Open diagnostics in qf'})

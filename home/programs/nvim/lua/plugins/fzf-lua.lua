@@ -30,6 +30,7 @@ fzf.setup({
             ['ctrl-u'] = 'half-page-up',
             ['ctrl-d'] = 'half-page-down',
             ['ctrl-c'] = 'abort',
+	    ["ctrl-q"] = "select-all+accept",
         },
     },
 })
