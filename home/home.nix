@@ -25,8 +25,9 @@
         	      fi
         	    '';
     };
-#TODO: - find a plugin to show hotkeys
-#	- create a menu(quickshell) to connect to the cisco vpn of the faculty 
+    #TODO: - find a plugin to show hotkeys
+    #	- create a menu(quickshell) to connect to the cisco vpn of the faculty
+    # 	- find a plugin to set up inline correction
     neovim =
       let
         toLua = str: "lua << EOF\n${str}\nEOF\n"; # convert one line config into lua
@@ -38,102 +39,90 @@
         viAlias = true;
         vimAlias = true;
         vimdiffAlias = true;
-	#extraLuaConfig = ''
-	#  local config_dir = vim.fn.stdpath("config")
-	#  package.path = package.path .. ";" .. config_dir .. "/lua/?.lua;" .. config_dir .. "/lua/?/init.lua"
+        #extraLuaConfig = ''
+        #  local config_dir = vim.fn.stdpath("config")
+        #  package.path = package.path .. ";" .. config_dir .. "/lua/?.lua;" .. config_dir .. "/lua/?/init.lua"
 
-	#  ${builtins.readFile ./programs/nvim/init.lua}
-	#'';
+        #  ${builtins.readFile ./programs/nvim/init.lua}
+        #'';
         extraPackages = with pkgs; [
-          gnumake 
-	  ripgrep 
-	  fd 
-	  texlab
+          gnumake
+          ripgrep
+          fd
+          texlab
           xclip
-	  #LANGUAGE SERVERS
-	  #basedpyright
-	  emmylua-ls
-	  pyright
-	  luajit
-	  nil
-	  jdt-language-server
-	  kotlin-language-server
+          #LANGUAGE SERVERS
+          #basedpyright
+          emmylua-ls
+          pyright
+          luajit
+          nil
+          jdt-language-server
+          kotlin-language-server
 
           #jdt-language-server
-          #gcc 
-	  texliveMedium #smth for tex files
+          #gcc
+          texliveMedium # smth for tex files
         ];
         plugins = with pkgs.vimPlugins; [
-		nvim-web-devicons
-	{
-	  plugin = nvim-lspconfig;
-	  config = toLuaFile ./programs/nvim/lua/plugins/lsp.lua;
-	}
+          nvim-web-devicons
           {
-            plugin = nvim-tree-lua;
-            config = ''
-              				    echo "NIX TREE CONFIG START"
 
-              				    packadd! nvim-tree.lua
+            plugin = iron-nvim;
+            config = toLuaFile ./programs/nvim/lua/plugins/iron-nvim.lua;
 
-              				    lua << EOF
-              					error("HELLO FROM  HOME MANAGER")
-              				      require("nvim-tree").setup({
-              					view = {
-              					  width = 50,
-              					},
-              				      })
-              				    EOF
-              				  '';
           }
+          {
+            plugin = nvim-lspconfig;
+            config = toLuaFile ./programs/nvim/lua/plugins/lsp.lua;
+          }
+          nvim-tree-lua
           {
             plugin = fzf-lua;
             config = toLuaFile ./programs/nvim/lua/plugins/fzf-lua.lua;
 
           }
-	  plenary-nvim
-	  {
-	    plugin = oxocarbon-nvim;
-	    config = toLuaFile ./programs/nvim/lua/plugins/oxocarbon.lua;
-	  }
-	  {
-	    plugin = vimtex;
+          plenary-nvim
+          {
+            plugin = oxocarbon-nvim;
+            config = toLuaFile ./programs/nvim/lua/plugins/oxocarbon.lua;
+          }
+          {
+            plugin = vimtex;
             config = toLuaFile ./programs/nvim/lua/plugins/vimtex.lua;
-	  }
-          	project-nvim
-		oil-nvim
+          }
+          project-nvim
+          oil-nvim
           #	quicker-nvim
-	  	render-markdown-nvim
-	  
-	  	undotree
+          render-markdown-nvim
+
+          undotree
           #	scope-nvim
           #	#snacks-nvim
-           	
+
           #	fzf-lua
           #	lsp
-          	lualine-nvim
+          lualine-nvim
           #	luatab
           #	mason
           #	yazi
           #	mini.nvim
-	  {
+          {
 
-          plugin = alpha-nvim;
-	  config = toLuaFile ./programs/nvim/lua/plugins/alpha-nvim.lua; 
+            plugin = alpha-nvim;
+            config = toLuaFile ./programs/nvim/lua/plugins/alpha-nvim.lua;
+          }
+          {
+            plugin = nvim-java;
+            config = toLuaFile ./programs/nvim/lua/plugins/nvim-java.lua;
+          }
+	  {
+	  plugin = undotree;
+	  config = toLuaFile ./programs/nvim/lua/plugins/undotree.lua;
 	  }
-	{
-	  plugin = nvim-java;
-	  config = toLuaFile ./programs/nvim/lua/plugins/nvim-java.lua;
-	}
 
           nvim-autopairs
-	  nvim-java
-	  {
 
-		plugin = iron-nvim;
-		config = toLuaFile ./programs/nvim/lua/plugins/iron-nvim.lua;
-
-	  }
         ];
       };
     direnv = {
@@ -146,8 +135,8 @@
       enable = true;
     };
     keepassxc = {
-	enable = true;
-	settings.Browser.UpdateBinaryPath = false;
+      enable = true;
+      settings.Browser.UpdateBinaryPath = false;
 
     };
 

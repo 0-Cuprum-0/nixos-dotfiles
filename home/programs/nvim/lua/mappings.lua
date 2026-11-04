@@ -48,3 +48,10 @@ vim.keymap.set('i', '<c-space>', function()
   vim.lsp.completion.get()
 end)
 --use ctrl-n and ctrl-p to navigate in suggestions in the floating window
+--
+--
+--FORMATTING
+vim.keymap.set('n', '<leader>fm', function()
+
+	vim.lsp.buf.format({ async = true})
+end,{desc = 'Format current buffer'})

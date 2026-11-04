@@ -36,6 +36,7 @@ require("lsp")
 require("plugins.nvim-autopairs")
 require("plugins.lualine")
 require("plugins.project")
+require("plugins.iron-nvim")
+--require("nvim-lspconfig")
 
-
-
+require("plugins.undotree")

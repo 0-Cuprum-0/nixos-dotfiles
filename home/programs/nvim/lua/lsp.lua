@@ -79,6 +79,9 @@ vim.lsp.config['nil'] = {
 	-- defined by the server. For example the schema for lua-language-server
 	-- can be found here https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json
 	settings = {
+		formatting = {
+			command = { 'nixfmt'}
+		}
 	}
 }
 
