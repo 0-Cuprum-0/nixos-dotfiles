@@ -1,19 +1,30 @@
---remap the <leader>
+ --remap the <leader>
 vim.g.mapleader = " "
   -- disable netrw at the very start of your init.lua
-  vim.g.loaded_netrw = 1
-  vim.g.loaded_netrwPlugin = 1
-  -- optionally enable 24-bit colour
-  vim.opt.termguicolors = true
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+-- optionally enable 24-bit colour
+vim.opt.termguicolors = true
 
-  --enable luatab
-  vim.opt.showtabline = 2
+--enable luatab
+vim.opt.showtabline = 2
   --keymaps
 vim.opt.scrolloff = 10  
 vim.opt.colorcolumn = "100"
 vim.opt.undofile = true
-vim.opt.completeopt = "menuone,noinsert,noselect" -- completion options
+--vim.opt.completeopt = "menuone,noinsert,noselect" -- completion options
 vim.opt.laststatus = 2
+
+   --enable line numbers
+vim.o.number = true
+vim.o.relativenumber = true
+--add keyboard
+vim.opt.clipboard = "unnamedplus"
+--  require("config.lazy")
+--  disable mouse
+--vim.opt.mouse = ""
+--enable\ define terminal
+vim.opt.shell = "bash"
 
 --INCLUDE'S
 require("mappings")
@@ -21,33 +32,10 @@ require("plugins.nvim-tree")
 require("plugins.fzf-lua")
 require("plugins.alpha-nvim")
 require("plugins.oxocarbon")
---require("lsp.python")
---require("lsp.lua")
 require("lsp")
 require("plugins.nvim-autopairs")
 require("plugins.lualine")
 require("plugins.project")
---vim.api.nvim_create_autocmd("DiagnosticChanged", {
---  group = diagnostic_qf_grp,
---  callback = function()
---    -- Get all current diagnostics across the entire project
---    local diagnostics = vim.diagnostic.get()
---    vim.schedule(function()
---      -- Check if the current window is still valid before doing anything
---      if not vim.api.nvim_win_is_valid(0) then return end
---    
---    if #diagnostics > 0 then
---      -- 1. Silently update the quickfix list content without jumping your cursor
---      vim.diagnostic.setqflist({ open = false })
---     local current_win = vim.api.nvim_get_current_win() 
---      -- 2. Open the quickfix window at the bottom if it isn't already open
---      -- (using 'cwindow' ensures it only opens if there are actual Errors/Warnings)
---      vim.cmd("cwindow")
---      vim.api.nvim_set_current_win(current_win)
---    else
---      -- 3. Automatically close the quickfix window if all errors are fixed!
---      vim.fn.setqflist({})
---      end
---    end)
---  end,
---})
+
+
+

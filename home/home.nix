@@ -25,7 +25,8 @@
         	      fi
         	    '';
     };
-
+#TODO: - find a plugin to show hotkeys
+#	- create a menu(quickshell) to connect to the cisco vpn of the faculty 
     neovim =
       let
         toLua = str: "lua << EOF\n${str}\nEOF\n"; # convert one line config into lua
@@ -54,9 +55,13 @@
 	  emmylua-ls
 	  pyright
 	  luajit
+	  nil
+	  jdt-language-server
+	  kotlin-language-server
 
           #jdt-language-server
           #gcc 
+	  texliveMedium #smth for tex files
         ];
         plugins = with pkgs.vimPlugins; [
 		nvim-web-devicons
@@ -91,13 +96,19 @@
 	    plugin = oxocarbon-nvim;
 	    config = toLuaFile ./programs/nvim/lua/plugins/oxocarbon.lua;
 	  }
+	  {
+	    plugin = vimtex;
+            config = toLuaFile ./programs/nvim/lua/plugins/vimtex.lua;
+	  }
           	project-nvim
+		oil-nvim
           #	quicker-nvim
 	  	render-markdown-nvim
 	  
+	  	undotree
           #	scope-nvim
           #	#snacks-nvim
-          #	vimtex
+           	
           #	fzf-lua
           #	lsp
           	lualine-nvim
@@ -110,7 +121,19 @@
           plugin = alpha-nvim;
 	  config = toLuaFile ./programs/nvim/lua/plugins/alpha-nvim.lua; 
 	  }
+	{
+	  plugin = nvim-java;
+	  config = toLuaFile ./programs/nvim/lua/plugins/nvim-java.lua;
+	}
+
           nvim-autopairs
+	  nvim-java
+	  {
+
+		plugin = iron-nvim;
+		config = toLuaFile ./programs/nvim/lua/plugins/iron-nvim.lua;
+
+	  }
         ];
       };
     direnv = {

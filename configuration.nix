@@ -23,6 +23,10 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
+fileSystems."/home/cuprum/data" =
+    { device = "/dev/disk/by-uuid/f4164617-c4cd-4ea3-bbdf-48ceb1074932";
+      fsType = "ext4";
+    };
   # Enable networking
   networking.networkmanager.enable = true;
 
@@ -48,6 +52,8 @@ environment.variables = {
     LC_TELEPHONE = "pl_PL.UTF-8";
     LC_TIME = "pl_PL.UTF-8";
   };
+ hardware.keyboard.qmk.enable = true;
+
 
 
   xdg.portal = {
@@ -114,12 +120,16 @@ nix.settings.experimental-features = [ "nix-command" "flakes" ];
 	nemo
 	pulseaudio
 	gcc                                                                                         
-        gnumake                                                                                     
+        gnumake                                                                                 
+	proxychains-ng 
+	mitmproxy
         fd                                                                                          
+
         ripgrep   
 	shared-mime-info
 	esptool
 	discord
+	dos2unix
 	networkmanager
 	(python313.withPackages (python-pkgs: [
 	    python-pkgs.gtfs-realtime-bindings
@@ -128,6 +138,9 @@ nix.settings.experimental-features = [ "nix-command" "flakes" ];
 	  nixfmt
 	  tree
 	  #avahi #mDNS
+	  via # QMK program	
+
+	  vial# QMK program	
 
   ];
 
@@ -158,6 +171,21 @@ services.asusd.enable = true;
 services.gvfs.enable = true;
 services.udisks2.enable = true;
 
+
+services.udev = {
+extraRules = ''
+  KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="6964", ATTRS{idProduct}=="0075", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl" 
+'';
+  packages = with pkgs; [
+    qmk
+    qmk-udev-rules # the only relevant
+    qmk_hid
+    via
+    vial
+    android-tools
+  ]; # packages
+
+}; # udev
 services.xserver.displayManager.lightdm.enable = true;
 services.xserver.windowManager.bspwm.enable = true;
 programs.dconf.enable = true;
@@ -241,7 +269,22 @@ systemd.services.gtfs_server= {
 
   ${pkgs.python313}/bin/python   /home/cuprum/GTFSAlertsProject/server/server_handler.py
   '';
-  wantedBy = [ "multi-user.target" ]; # starts after login
+  wantedBy = [ "multi-user.target" ]; # starts after boot
+};
+
+
+
+systemd.services.downloads_sorting_script= {
+  description = "A script that sorts all items in ~/Downloads by file format. ";
+  serviceConfig = {
+    User = "cuprum";
+    Restart = "always";
+  };
+  script = ''
+
+  ${pkgs.bash}/bin/bash /etc/nixos/home/scripts/downloads.sh
+  '';
+  wantedBy = [ "multi-user.target" ]; # starts after boot
 };
 
 networking.firewall = {
@@ -250,8 +293,12 @@ networking.firewall = {
 
 
 };
+	
 
-
+virtualisation.virtualbox.host.enable = true;
+users.extraGroups.vboxusers.members = [ "cuprum" ];
+#virtualisation.virtualbox.guest.enable = true;
+virtualisation.virtualbox.guest.dragAndDrop = true;
 
 virtualisation.docker.enable = true;
 # Some programs need SUID wrappers, can be configured further or are

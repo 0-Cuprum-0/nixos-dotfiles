@@ -41,7 +41,7 @@
 	pkgs.asusctl
 	pkgs.telegram-desktop
 	pkgs.baobab
-	#pkgs.google-chrome
+	pkgs.google-chrome
 	pkgs.rsync
 	pkgs.freecad
 	pkgs.kicad
@@ -64,6 +64,22 @@
 	pkgs.vlc
 	pkgs.libreoffice
 	#pkgs.avahi
+	pkgs.cheese
+	pkgs.net-tools
+	pkgs.yt-dlp
+	pkgs.qmk
+	#pkgs.rPackages.Anaconda DOESNT WORK ON NIXOS
+	pkgs.jupyter
+
+#	pkgs.virtualbox
+	pkgs.openconnect
+	pkgs.krita
+	pkgs.android-studio
+#	pkgs.visualvm
+	pkgs.netbeans
+	pkgs.python313Packages.numpy
+	pkgs.python313Packages.pandas
+	   	
 ];      
 
 }
